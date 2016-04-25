@@ -1,12 +1,12 @@
 # goon-server
 Explore your city
 
-This repository contains the source code for the geo-tagging API and front-end to visualize a tag.
+This repository contains the source code for goon API.
 
 The API consists in the following main components:
 
  * Node modules to manage the rest api and to connect with externals modules.
- * A server exposing an API to interact with third-party services and returns sorted search results.
+ * A server exposing an API to interact with third-party services ([our app](https://github.com/HexanomeBeurreTwo/GOON-App)).
 
 ## Requirements
 
