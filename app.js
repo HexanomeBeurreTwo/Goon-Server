@@ -1,10 +1,9 @@
 "use strict";
 
 var express = require('express');
-var path    = require('path');
 var Sequelize = require('sequelize');
 
-var routes = require('./routes/index.js');
+var routes = require('./routes/routes.js');
 
 
 // *** Config Express *** //

@@ -1,19 +1,27 @@
 var express = require('express');
+var path    = require('path');
 var router = express.Router();
 var models = require('../models/index');
 
+var user = require('./user.route');
+user(router);
+
 router.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname+'/views/index.html'));
+  res.sendFile(path.join(__dirname+'../views/index.html'));
 });
 
 router.get('/helloworld', function (req, res) {
 	var searchQuery = req.query.q;
   // default google results is set to 10
-	var msg = "Hello World"
+	var msg = "Hello World";
 
 	res.contentType('application/json');
   res.send(JSON.stringify(msg));
 });
+
+
+
+module.exports = router;
 
 // ** EXEMPLES BELOW **
 
@@ -81,5 +89,3 @@ router.get('/helloworld', function (req, res) {
 //     res.json(todo);
 //   });
 // });
-
-module.exports = router;
