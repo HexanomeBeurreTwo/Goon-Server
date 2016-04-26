@@ -5,4 +5,6 @@ var user = require ("../controllers/user.controller");
 module.exports = function(router)
 {
   router.get('/users', user.getUsers);
+  router.post('/user', user.addUser);
+  router.get('/fake', user.fake);
 };
