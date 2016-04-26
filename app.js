@@ -1,5 +1,6 @@
 "use strict";
 
+var fs      = require('fs');
 var express = require('express');
 var Sequelize = require('sequelize');
 
@@ -9,8 +10,8 @@ var routes = require('./routes/routes.js');
 // *** Config Express *** //
 
 var app = express();
-// app.set('view engine', 'ejs');
-// app.engine('.html', require('ejs').renderFile());
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
 
 app.use('/views',express.static(__dirname + '/views'));
 
@@ -60,7 +61,7 @@ app.use(function(err, req, res, next) {
 // *** Config Postgres *** //
 
 
-var sequelize = new Sequelize('postgres://localhost:5432/cyrilcanete', {
+var sequelize = new Sequelize('postgres://localhost:5432/victor', {
   define: {
     timestamps: false // true by default
   }
