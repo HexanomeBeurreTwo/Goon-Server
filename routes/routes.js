@@ -4,21 +4,20 @@ var router = express.Router();
 var models = require('../models/index');
 
 var user = require('./user.route');
+var helloworld = require('./helloworld.route');
 user(router);
+helloworld(router);
 
 router.get('/', function (req, res) {
   res.sendFile(path.join(__dirname+'../views/index.html'));
 });
 
-router.get('/helloworld', function (req, res) {
-	var searchQuery = req.query.q;
-  // default google results is set to 10
-	var msg = "Hello World";
-
-	res.contentType('application/json');
-  res.send(JSON.stringify(msg));
+// catch 404 and forward to error handler
+router.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
-
 
 
 module.exports = router;
