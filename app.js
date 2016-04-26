@@ -3,10 +3,19 @@
 var express = require('express');
 var path    = require('path');
 var Sequelize = require('sequelize');
-// var globe = require('./helpers/globe.js');
+
+var routes = require('./routes/index.js');
+
+
+// *** Config Express *** //
 
 var app = express();
+
 app.use('/views',express.static(__dirname + '/views'));
+
+
+// *** main routes *** //
+app.use('/', routes);
 
 /* Avoid CROSS Origin request */
 app.use(function(req, res, next) {
@@ -15,29 +24,40 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname+'/views/index.html'));
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
-app.get('/helloworld', function (req, res) {
-	var searchQuery = req.query.q;
-  // default google results is set to 10
-	var msg = "Hello World"
 
-	res.contentType('application/json');
-  res.send(JSON.stringify(msg));
+// *** error handlers *** //
+
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+  app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+      message: err.message,
+      error: err
+    });
+  });
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: {}
+  });
 });
 
-// var sequelize = new Sequelize("cyrilcanete", "cyrilcanete", "", {
-//   host: 'localhost',
-//   dialect: 'postgres',
-//
-//   pool: {
-//     max: 5,
-//     min: 0,
-//     idle: 10000
-//   },
-// });
+// *** Config Postgres *** //
+
 
 var sequelize = new Sequelize('postgres://localhost:5432/cyrilcanete', {
   define: {
@@ -56,24 +76,17 @@ var User = sequelize.define('user', {
 }, {
   freezeTableName: true // Model tableName will be the same as the model name
 });
-
-
-
-var User = sequelize.define('user', {}); // timestamps is false by default
-var Post = sequelize.define('post', {}, {
-  timestamps: true // timestamps will now be true
-});
-
 User.sync({force: true}).then(function () {
   // Table created
   return User.create({
     firstName: 'John',
     lastName: 'Hancock'
+  }).then(function()  {
+    User.findOne().then(function (user) {
+      var user = user.get('firstName');
+      console.log(user);
+    });
   });
-});
-
-User.findOne().then(function (user) {
-    console.log(user);
 });
 
 var server = app.listen(process.env.PORT || 3000, function () {
