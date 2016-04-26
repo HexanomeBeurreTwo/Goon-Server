@@ -2,7 +2,7 @@ machine:
   node:
     version: 5.10.1
 deployment:
-  staging:
+  prod:
     branch: master
     heroku:
       appname: goonapp
