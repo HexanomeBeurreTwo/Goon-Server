@@ -2,6 +2,7 @@
 
 var express = require('express');
 var path    = require('path');
+var Sequelize = require('sequelize');
 // var globe = require('./helpers/globe.js');
 
 var app = express();
@@ -25,6 +26,54 @@ app.get('/helloworld', function (req, res) {
 
 	res.contentType('application/json');
   res.send(JSON.stringify(msg));
+});
+
+// var sequelize = new Sequelize("cyrilcanete", "cyrilcanete", "", {
+//   host: 'localhost',
+//   dialect: 'postgres',
+//
+//   pool: {
+//     max: 5,
+//     min: 0,
+//     idle: 10000
+//   },
+// });
+
+var sequelize = new Sequelize('postgres://localhost:5432/cyrilcanete', {
+  define: {
+    timestamps: false // true by default
+  }
+});
+
+var User = sequelize.define('user', {
+  firstName: {
+    type: Sequelize.STRING,
+    field: 'first_name' // Will result in an attribute that is firstName when user facing but first_name in the database
+  },
+  lastName: {
+    type: Sequelize.STRING
+  }
+}, {
+  freezeTableName: true // Model tableName will be the same as the model name
+});
+
+
+
+var User = sequelize.define('user', {}); // timestamps is false by default
+var Post = sequelize.define('post', {}, {
+  timestamps: true // timestamps will now be true
+});
+
+User.sync({force: true}).then(function () {
+  // Table created
+  return User.create({
+    firstName: 'John',
+    lastName: 'Hancock'
+  });
+});
+
+User.findOne().then(function (user) {
+    console.log(user);
 });
 
 var server = app.listen(process.env.PORT || 3000, function () {
