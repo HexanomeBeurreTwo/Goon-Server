@@ -24,29 +24,6 @@ app.use(function(req, res, next) {
   next();
 });
 
-// *** Config Postgres *** //
-
-
-var sequelize = new Sequelize('postgres://localhost:5432/victor', {
-  define: {
-    timestamps: false // true by default
-  }
-});
-
-//
-// User.sync({force: true}).then(function () {
-//   // Table created
-//   return User.create({
-//     firstName: 'John',
-//     lastName: 'Hancock'
-//   }).then(function()  {
-//     User.findOne().then(function (user) {
-//       var user = user.get('firstName');
-//       console.log(user);
-//     });
-//   });
-// });
-
 var server = app.listen(process.env.PORT || 3000, function () {
   var host = server.address().address;
   var port = server.address().port;
