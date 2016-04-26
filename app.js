@@ -10,8 +10,8 @@ var routes = require('./routes/routes.js');
 // *** Config Express *** //
 
 var app = express();
-app.engine('html', require('ejs').renderFile);
-app.set('view engine', 'html');
+// app.engine('html', require('ejs').renderFile);
+// app.set('view engine', 'html');
 
 app.use('/views',express.static(__dirname + '/views'));
 
