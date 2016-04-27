@@ -5,10 +5,6 @@ module.exports = function(sequelize, DataTypes) {
   var Activity = sequelize.define('Activity', {
     id: {type: DataTypes.INTEGER, allowNull: false, unique: true, autoIncrement: true, primaryKey: true},
     name: { type: DataTypes.STRING, allowNull: false},
-    type: {
-      type:   DataTypes.ENUM,
-      values: ['restaurant', 'museum'],
-    },
     description: { type: DataTypes.STRING},
     tags: { type: DataTypes.ARRAY(DataTypes.TEXT)},
     address: { type: DataTypes.STRING},
@@ -21,7 +17,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     classMethods: {
       associate: function(models) {
-        Activity.hasOne(models.ActivityType);
+        Activity.hasOne(models.ActivityType, {as: 'type'});
         Activity.belongsToMany(models.MachingChannelActivity, {through: 'MachingActivity'});
       }
     }
