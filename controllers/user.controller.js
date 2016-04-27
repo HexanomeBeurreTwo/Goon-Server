@@ -30,8 +30,8 @@ var addUser = function (req, res) {
   if (!req.query.password)
     res.status(500).send('ERROR: Missing params "password"');
   models.User.create({
-    username: req.query.username,
-    email: req.query.email,
+    username: req.query.username.toLowerCase(),
+    email: req.query.email.toLowerCase(),
     password: req.query.password,
     citizen: req.query.citizen,
     age: req.query.age,
@@ -84,9 +84,9 @@ var userConnection = function (req, res) {
   if (!req.query.password)
     return res.status(500).send('ERROR: Missing params "password"');
   if (req.query.username)
-    var query = {username: req.query.username};
+    var query = {username: req.query.username.toLowerCase()};
   else if (req.query.email)
-    var query = {email: req.query.email};
+    var query = {email: req.query.email.toLowerCase()};
   models.User.findOne({where: query})
   .then(function (user) {
     if(user.get('password') === req.query.password)
