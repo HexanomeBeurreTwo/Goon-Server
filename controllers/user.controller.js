@@ -14,7 +14,7 @@ var getAllUsers = function (req, res) {
 module.exports.getAllUsers = getAllUsers;
 
 /**
- * Fullfill with activities, booking and reminders a given user profile
+ * Creates a user in the database
  * @param {string} username : the user username - required
  * @param {string} email : the user email - required
  * @param {string} password : the user password - required
@@ -70,3 +70,33 @@ var getUser = function(req, res) {
   });
 }
 module.exports.getUser = getUser;
+
+/**
+ * Allows connection for users and return the user object if succed. email or username required
+ * @param {string} username : the user username - required (or email)
+ * @param {string} email : the user email - required (or username)
+ * @param {string} password : the user password - required
+ * @return {Object} user if succed, error else
+ */
+var userConnection = function (req, res) {
+  if (!req.query.username && !req.query.email)
+    return res.status(500).send('ERROR: Missing params "email" or "username"');
+  if (!req.query.password)
+    return res.status(500).send('ERROR: Missing params "password"');
+  if (req.query.username)
+    var query = {username: req.query.username};
+  else if (req.query.email)
+    var query = {email: req.query.email};
+  models.User.findOne({where: query})
+  .then(function (user) {
+    if(user.get('password') === req.query.password)
+      res.send(user.toJSON());
+    else
+      res.send('Wrong password');
+  })
+  .catch(function(err) {
+    console.error(err.stack);
+    return res.status(500).send('An error occured. Please try again later.');
+  });
+}
+module.exports.userConnection = userConnection;
