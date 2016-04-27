@@ -17,8 +17,6 @@ app.use('/views',express.static(__dirname + '/views'));
 
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
-  // res.sendFile('index.html', { root: __dirname + './../views/' });
-  // res.sendFile(path.resolve(__dirname + '/views/index.html'));
 });
 
 // *** main routes *** //
@@ -34,5 +32,6 @@ app.use(function(req, res, next) {
 var server = app.listen(process.env.PORT || 3000, function () {
   var host = server.address().address;
   var port = server.address().port;
+
   console.log('Goon server listening at http://%s:%s', host, port);
 });
