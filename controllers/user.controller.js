@@ -48,15 +48,15 @@ module.exports.deleteUser = deleteUser;
 var getUser = function(req, res) {
   //récuper les infos d'un user à partir de son id
   var userId = req.params.id;
-  models.User.findAll({
+  models.User.findOne({
     where: {
       id: userId,
     }
-  }).then(function (users) {
-    if(users[0])
-      res.send(users[0].get('username'));
+  }).then(function (user) {
+    if(user)
+      res.send(user.get('username'));
     else
-      res.send('error');
+      res.send('No User with the id :' + userId);
   });
 }
 module.exports.getUser = getUser;
