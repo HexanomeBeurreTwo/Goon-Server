@@ -25,3 +25,19 @@ var addUser = function (req, res) {
   });
 };
 module.exports.addUser = addUser;
+
+var update = function (req, res) {
+  // mise à jour du jour du user à partir de son id
+}
+module.exports.updateUser = updateUser;
+
+
+var delete = function(req, res) {
+  // supprime un user à partir de son id
+}
+module.exports.deleteUser = deleteUser;
+
+var getUser = function(req, res) {
+  //récuper les infos d'un user à partir de son id
+}
+module.exports.getUser = getUser;
