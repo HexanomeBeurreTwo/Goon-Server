@@ -29,5 +29,9 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:HexanomeBeurreTwo/Goon-Server.git"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5"
   }
 }
