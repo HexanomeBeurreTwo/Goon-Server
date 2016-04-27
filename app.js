@@ -10,9 +10,6 @@ var routes = require('./routes/routes.js');
 // *** Config Express *** //
 
 var app = express();
-app.engine('html', require('ejs').renderFile);
-app.set('view engine', 'html');
-
 
 // *** main routes *** //
 app.use('/', routes);

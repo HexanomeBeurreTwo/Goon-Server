@@ -14,14 +14,15 @@ var getUsers = function (req, res) {
 module.exports.getUsers = getUsers;
 
 var addUser = function (req, res) {
-  models.User.sync({force: true}).then(function () {
-    // Table created
-    return models.User.create({
-      firstName: 'Cyril',
-      lastName: 'Canete'
-    }).then(function()  {
-      res.send('Created');
-    });
+  return models.User.create({
+    username: 'Victor',
+    email: 'victor@free.fr',
+    password: 'azerty',
+    citizen: 'lyon',
+    age: 21,
+    tags: null,
+  }).then(function()  {
+    res.send('Created');
   });
 };
 module.exports.addUser = addUser;
