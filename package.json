@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "mocha"
   },
   "keywords": [
     "lyon",
@@ -30,5 +31,9 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:HexanomeBeurreTwo/Goon-Server.git"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5"
   }
 }
