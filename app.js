@@ -10,9 +10,16 @@ var routes = require('./routes/routes.js');
 // *** Config Express *** //
 
 var app = express();
-app.engine('html', require('ejs').renderFile);
-app.set('view engine', 'html');
+// app.engine('html', require('ejs').renderFile);
+// app.set('view engine', 'html');
 
+app.use('/views',express.static(__dirname + '/views'));
+
+app.get('/', function (req, res) {
+  res.sendFile(__dirname + '/views/index.html');
+  // res.sendFile('index.html', { root: __dirname + './../views/' });
+  // res.sendFile(path.resolve(__dirname + '/views/index.html'));
+});
 
 // *** main routes *** //
 app.use('/', routes);
