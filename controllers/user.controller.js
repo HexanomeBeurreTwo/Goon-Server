@@ -54,7 +54,7 @@ var getUser = function(req, res) {
     }
   }).then(function (user) {
     if(user)
-      res.send(user.get('username'));
+      res.send(user.toJSON());
     else
       res.send('No User with the id :' + userId);
   });
