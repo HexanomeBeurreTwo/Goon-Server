@@ -2,18 +2,18 @@
 
 var models = require('../models/index');
 
+/**
+ * Controller for GET /users/
+ * Return all the users of the database
+ * @return {Array of User} array contening all the users objects
+ */
 var getAllUsers = function (req, res) {
-  models.User.findOne().then(function (user) {
-    var user = user.get('name');
-    if(user)
-      res.send(user);
-    else
-      res.send('error');
-  });
+  // TODO: Return all users as an array on user
 };
 module.exports.getAllUsers = getAllUsers;
 
 /**
+ * Controller for POST /user/
  * Creates a user in the database
  * @param {string} username : the user username - required
  * @param {string} email : the user email - required
@@ -58,6 +58,12 @@ var deleteUser = function(req, res) {
 }
 module.exports.deleteUser = deleteUser;
 
+/**
+ * Controller for GET /user/:id
+ * Return a user by id
+ * @param {interger} id : the user id
+ * @return {User} user if existing, error else
+ */
 var getUser = function(req, res) {
   //récuper les infos d'un user à partir de son id
   var userId = req.params.id;
@@ -72,6 +78,7 @@ var getUser = function(req, res) {
 module.exports.getUser = getUser;
 
 /**
+ * Controller for GET /connection
  * Allows connection for users and return the user object if succed. email or username required
  * @param {string} username : the user username - required (or email)
  * @param {string} email : the user email - required (or username)
