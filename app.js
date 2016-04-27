@@ -35,3 +35,5 @@ var server = app.listen(process.env.PORT || 3000, function () {
 
   console.log('Goon server listening at http://%s:%s', host, port);
 });
+
+module.exports = server;
