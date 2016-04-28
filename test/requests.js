@@ -7,7 +7,7 @@ describe('Hello World Controller', function() {
     it('should return right json string: ' + JSON.stringify(msg), function (done) {
     	request
         	.get('/helloworld')
-            .expect(200, done);
+            .expect(msg, done);
     });
   });
 });
