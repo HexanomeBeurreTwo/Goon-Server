@@ -9,5 +9,6 @@ module.exports = function(router)
   router.put('/user/:id', user.updateUser);
   router.delete('/user/:id', user.deleteUser);
   router.get('/user/:id', user.getUser);
+  router.get('/user/:id/channel', user.getChannels);
   router.get('/connection', user.userConnection);
 };

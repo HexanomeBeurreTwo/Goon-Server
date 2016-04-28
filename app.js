@@ -1,5 +1,6 @@
 "use strict";
 
+require('dotenv').config();
 var fs      = require('fs');
 var express = require('express');
 var Sequelize = require('sequelize');
@@ -32,5 +33,8 @@ app.use(function(req, res, next) {
 var server = app.listen(process.env.PORT || 3000, function () {
   var host = server.address().address;
   var port = server.address().port;
+
   console.log('Goon server listening at http://%s:%s', host, port);
 });
+
+module.exports = server;

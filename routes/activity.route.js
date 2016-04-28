@@ -4,7 +4,7 @@ var activity = require ("../controllers/activity.controller");
 
 module.exports = function(router)
 {
-	router.get('/activities', activity.getActivities);
+	router.get('/activity', activity.getActivities);
 	router.post('/activity', activity.addActivity);
 	router.put('/activity/:id', activity.updateActivity);
 	router.delete('activity/:id', activity.deleteActivity);

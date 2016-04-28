@@ -9,9 +9,9 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     classMethods: {
       associate: function(models) {
-        Channel.belongsToMany(models.User, {through: 'UserChannel'});
-        Channel.belongsToMany(models.MachingChannelActivity, {through: 'MachingChannel'});
-        Channel.hasMany(models.MachingChannelActivity, {as: 'activities'});
+        Channel.belongsToMany(models.User, {through: 'UserChannel', foreignKey: 'userId' });
+        // Channel.belongsToMany(models.MachingChannelActivity, {through: 'MachingChannel'});
+        // Channel.hasMany(models.MachingChannelActivity, {as: 'activities'});
       }
     }
   });

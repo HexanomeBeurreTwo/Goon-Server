@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "mocha",
+    "postinstall": "sequelize db:migrate"
   },
   "keywords": [
     "lyon",
@@ -14,6 +16,8 @@
   ],
   "author": "HexanomeBeurreTwo",
   "dependencies": {
+    "dotenv": "^2.0.0",
+    "ejs": "^2.4.1",
     "express": "4.13.3",
     "fs": "0.0.2",
     "pg": "^4.5.5",
