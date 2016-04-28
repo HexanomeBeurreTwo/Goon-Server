@@ -9,6 +9,7 @@ var models = require('../models/index');
  */
 var getAllUsers = function (req, res) {
   // TODO: Return all users as an array on user
+  res.status(500).json({error: 'Getting all user is not allowed.'});
 };
 module.exports.getAllUsers = getAllUsers;
 
@@ -24,27 +25,27 @@ module.exports.getAllUsers = getAllUsers;
  */
  // TODO: Use find or create to handle user already created
 var addUser = function (req, res) {
-  if (!req.query.username)
+  if (!req.body.username)
     res.status(500).send('ERROR: Missing params "username"');
-  if (!req.query.email)
+  if (!req.body.email)
     res.status(500).send('ERROR: Missing params "email"');
-  if (!req.query.password)
+  if (!req.body.password)
     res.status(500).send('ERROR: Missing params "password"');
   models.User.sync().then(function () {
     models.User.create({
-      username: req.query.username.toLowerCase(),
-      email: req.query.email.toLowerCase(),
-      password: req.query.password,
-      citizen: req.query.citizen,
-      age: req.query.age,
+      username: req.body.username.toLowerCase(),
+      email: req.body.email.toLowerCase(),
+      password: req.body.password,
+      citizen: req.body.citizen,
+      age: req.body.age,
       tags: null,
     })
     .then(function(user) {
-      return res.status(200).send({userId: user.get('id')});
+      return res.status(200).json({userId: user.get('id')});
     })
     .catch(function(err) {
       console.error(err.stack);
-      return res.status(500).send('An error occured. User may already exists.');
+      return res.status(500).json({error: 'An error occured. User may already exists.'});
     });
   });
 };
