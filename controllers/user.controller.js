@@ -49,14 +49,37 @@ var addUser = function (req, res) {
 };
 module.exports.addUser = addUser;
 
+/**
+ * Controller for update /user/:id
+ * Return a user by id
+ * @param {interger} id : the user id
+ * @return {User} user if existing, error else
+ */
 var updateUser = function (req, res) {
   // mise à jour du jour du user à partir de son id
+  var userId = req.params.id;
+  models.User.update({where: {id: userId,}})
+  .then(function(user)) {
+
+  }
 }
 module.exports.updateUser = updateUser;
 
-
+/**
+ * Controller for delete /user/:id
+ * Return nothing
+ * @param {interger} id : the user id
+ */
 var deleteUser = function(req, res) {
   // supprime un user à partir de son id
+  var userId = req.params.id;
+  models.User.destroy({where: {id: userId,} truncate: true})
+  .then(function(user) {
+    if(user)
+      res.send('User with id'+ userId +' deleted' );
+    else
+      res.send('No User with this id :' + userId);
+    });
 }
 module.exports.deleteUser = deleteUser;
 
