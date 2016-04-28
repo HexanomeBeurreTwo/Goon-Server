@@ -9,6 +9,15 @@ var models = require('../models/index');
  */
 var getAllUsers = function (req, res) {
   // TODO: Return all users as an array on user
+  models.users.findAll({})
+    .then(function(user) {
+      return res.send(user.toJSON());
+    })
+    .catch(function(err) {
+      console.error(err.stack);
+      return res.status(500).send('An error occured.');
+    });
+
 };
 module.exports.getAllUsers = getAllUsers;
 
@@ -59,9 +68,21 @@ module.exports.addUser = addUser;
 var updateUser = function (req, res) {
   // mise à jour du jour du user à partir de son id
   var userId = req.params.id;
-  models.User.update({where: {id: userId,}})
-  .then(function(user) {
-
+  models.User.update({
+      username: req.query.username.toLowerCase(),
+      email: req.query.email.toLowerCase(),
+      password: req.query.password,
+      citizen: req.query.citizen,
+      age: req.query.age,
+      tags: req.query.tags,
+    },{
+      where : {id: userId}
+    })
+  .then(function() {
+      return res.send(user.toJSON());
+  })
+  .catch (function() {
+    return res.send('No User with this id :' + userId);
   });
 };
 module.exports.updateUser = updateUser;
@@ -74,13 +95,14 @@ module.exports.updateUser = updateUser;
 var deleteUser = function(req, res) {
   // supprime un user à partir de son id
   var userId = req.params.id;
-  models.User.destroy({where: {id: userId}, truncate: true})
-  .then(function(user) {
-    if(user)
-      res.send('User with id'+ userId +' deleted' );
-    else
-      res.send('No User with this id :' + userId);
+  models.User.destroy({where: {id: userId}})
+  .then(function() {
+      return res.send('User with id'+ userId +' deleted' );
+    })
+    .catch (function() {
+      return res.send('No User with this id :' + userId);
     });
+      
 };
 module.exports.deleteUser = deleteUser;
 
