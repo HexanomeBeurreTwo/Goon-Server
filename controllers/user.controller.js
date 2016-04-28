@@ -22,6 +22,7 @@ module.exports.getAllUsers = getAllUsers;
  * @param {string} age : the user age
  * @return {Object} userId if creating, error else
  */
+ // TODO: Use find or create to handle user already created
 var addUser = function (req, res) {
   if (!req.query.username)
     res.status(500).send('ERROR: Missing params "username"');
@@ -29,33 +30,58 @@ var addUser = function (req, res) {
     res.status(500).send('ERROR: Missing params "email"');
   if (!req.query.password)
     res.status(500).send('ERROR: Missing params "password"');
-  models.User.create({
-    username: req.query.username.toLowerCase(),
-    email: req.query.email.toLowerCase(),
-    password: req.query.password,
-    citizen: req.query.citizen,
-    age: req.query.age,
-    tags: null,
-  })
-  .then(function(user) {
-    return res.status(200).send({userId: user.get('id')});
-  })
-  .catch(function(err) {
-    console.error(err.stack);
-    return res.status(500).send('An error occured. User may already exists.');
+  models.User.sync().then(function () {
+    models.User.create({
+      username: req.query.username.toLowerCase(),
+      email: req.query.email.toLowerCase(),
+      password: req.query.password,
+      citizen: req.query.citizen,
+      age: req.query.age,
+      tags: null,
+    })
+    .then(function(user) {
+      return res.status(200).send({userId: user.get('id')});
+    })
+    .catch(function(err) {
+      console.error(err.stack);
+      return res.status(500).send('An error occured. User may already exists.');
+    });
   });
 };
 module.exports.addUser = addUser;
 
+/**
+ * Controller for update /user/:id
+ * Return a user by id
+ * @param {interger} id : the user id
+ * @return {User} user if existing, error else
+ */
 var updateUser = function (req, res) {
   // mise à jour du jour du user à partir de son id
-}
+  var userId = req.params.id;
+  models.User.update({where: {id: userId,}})
+  .then(function(user) {
+
+  });
+};
 module.exports.updateUser = updateUser;
 
-
+/**
+ * Controller for delete /user/:id
+ * Return nothing
+ * @param {interger} id : the user id
+ */
 var deleteUser = function(req, res) {
   // supprime un user à partir de son id
-}
+  var userId = req.params.id;
+  models.User.destroy({where: {id: userId}, truncate: true})
+  .then(function(user) {
+    if(user)
+      res.send('User with id'+ userId +' deleted' );
+    else
+      res.send('No User with this id :' + userId);
+    });
+};
 module.exports.deleteUser = deleteUser;
 
 /**
