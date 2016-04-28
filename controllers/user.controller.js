@@ -133,3 +133,31 @@ var userConnection = function (req, res) {
   });
 }
 module.exports.userConnection = userConnection;
+
+/**
+ * Controller for GET /user/:id/channel
+ * Return the channels that an user subscribed
+ * @param {interger} id : the user id
+ * @return {Arrar[Channel]} An array of Channel
+ */
+var getChannels = function(req, res) {
+  //récuper les infos d'un user à partir de son id
+  var userId = req.params.id;
+  models.User.findOne({where: {id: userId,}})
+  .then(function (user) {
+    user.getChannels()
+    .then(function (channels) {
+      console.log(channels);
+      return res.status(200).send(channels);
+    })
+    .catch(function (err) {
+      console.error(err.stack);
+      return res.status(500).send('An error occured. Users channels unaccessible.');
+    });
+  })
+  .catch(function (err) {
+    console.error(err.stack);
+    return res.status(500).send('An error occured. User might not exist.');
+  });
+}
+module.exports.getChannels = getChannels;
