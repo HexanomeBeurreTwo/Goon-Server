@@ -25,11 +25,11 @@ module.exports.getAllUsers = getAllUsers;
  // TODO: Use find or create to handle user already created
 var addUser = function (req, res) {
   if (!req.query.username)
-    res.status(500).send('ERROR: Missing params "username"');
+    return res.status(500).send('ERROR: Missing params "username"');
   if (!req.query.email)
-    res.status(500).send('ERROR: Missing params "email"');
+    return res.status(500).send('ERROR: Missing params "email"');
   if (!req.query.password)
-    res.status(500).send('ERROR: Missing params "password"');
+    return res.status(500).send('ERROR: Missing params "password"');
   models.User.sync().then(function () {
     models.User.create({
       username: req.query.username.toLowerCase(),
