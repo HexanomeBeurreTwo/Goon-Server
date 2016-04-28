@@ -4,7 +4,8 @@ var router = express.Router();
 var models = require('../models/index');
 
 var user = require('./user.route')(router);
-var channel = require('./channel.route')(router);
+var activity = require('./activity.route')(router);
+var activityType = require('./activityType.route')(router);
 var helloworld = require('./helloworld.route')(router);
 
 // catch 404 and forward to error handler

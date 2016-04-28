@@ -1,5 +1,6 @@
 "use strict";
 
+require('dotenv').config();
 var fs      = require('fs');
 var express = require('express');
 var Sequelize = require('sequelize');
