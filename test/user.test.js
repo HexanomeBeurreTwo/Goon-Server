@@ -1,6 +1,8 @@
 var api = require('../app.js'),
 request = require('supertest')(api);
-var mocha = require('mocha');
+// var mocha = require('mocha');
+var chai = require('chai')
+var expect = chai.expect;
 
 var userId;
 var callbackCounter = 0;
@@ -71,11 +73,11 @@ function modify() {
             .end(function(err, res) {
               if(err) return done(err);
 
-              expect(res.body.id).to.equal(userId);
-              expect(res.body.username).to.equal(newUsername);
-              expect(res.body.email).to.equal("test@continuous-integration-test.com");
-              expect(res.body.password).to.equal("passwordtest");
-              expect(res.body.citizen).to.equal("lyon");
+              username = newUsername;
+              expect(res.body.username).to.equal(username);
+              expect(res.body.email).to.equal(email);
+              expect(res.body.password).to.equal(password);
+              expect(res.body.citizen).to.equal(citizen);
               expect(res.body.age).to.equal(null);
               expect(res.body.tags).to.equal(null);
               // expect(res.body.createdAt).to.equal("2016-04-28T13:04:49.421Z");
@@ -88,7 +90,6 @@ function modify() {
         console.log('PUT not done. Body: '+userId);
       }
       callbackCounter++;
-      deleteUser();
     });
   });
 
@@ -102,14 +103,13 @@ function modify() {
             // .expect('Content-Type', /json/)
             .expect(200)
             .end(function(err, res) {
-              callbackCounter++;
               if(err) return done(err);
 
               expect(res.body.id).to.equal(userId);
-              expect(res.body.username).to.equal("usertest");
-              expect(res.body.email).to.equal("test@continuous-integration-test.com");
-              expect(res.body.password).to.equal("passwordtest");
-              expect(res.body.citizen).to.equal("lyon");
+              expect(res.body.username).to.equal(username);
+              expect(res.body.email).to.equal(email);
+              expect(res.body.password).to.equal(password);
+              expect(res.body.citizen).to.equal(citizen);
               expect(res.body.age).to.equal(null);
               expect(res.body.tags).to.equal(null);
               // expect(res.body.createdAt).to.equal("2016-04-28T13:04:49.421Z");
@@ -121,7 +121,6 @@ function modify() {
         console.log('GET user info not done. Body: '+userId);
       }
       callbackCounter++;
-      deleteUser();
     });
   });
   describe('GET /connection', function() {
@@ -130,20 +129,31 @@ function modify() {
         it('respond with json', function (done) {
           request
             .get('/connection')
+            .set('Content-Type', 'application/x-www-form-urlencoded')
             .set('Accept', 'application/json')
             // .expect('Content-Type', /json/)
+            .query({
+              'username': username,
+              'password': password
+              })
             .expect(200)
-            .end(function (argument) {
-              callbackCounter++;
-              if(err) return done(err);
+            .end(function (err, res) {
+              // if(err) return done(err);
+
+              expect(res.body.id).to.equal(userId);
+              expect(res.body.username).to.equal(username);
+              expect(res.body.email).to.equal(email);
+              expect(res.body.password).to.equal(password);
+              expect(res.body.citizen).to.equal(citizen);
+              expect(res.body.age).to.equal(null);
+              expect(res.body.tags).to.equal(null);
               done();
-            })
+            });
         });
       } else  {
         console.log('GET connection not done. Body: '+userId);
       }
       callbackCounter++;
-      deleteUser();
     });
   });
 }
