@@ -29,20 +29,22 @@ var addUser = function (req, res) {
     res.status(500).send('ERROR: Missing params "email"');
   if (!req.query.password)
     res.status(500).send('ERROR: Missing params "password"');
-  models.User.create({
-    username: req.query.username.toLowerCase(),
-    email: req.query.email.toLowerCase(),
-    password: req.query.password,
-    citizen: req.query.citizen,
-    age: req.query.age,
-    tags: null,
-  })
-  .then(function(user) {
-    return res.status(200).send({userId: user.get('id')});
-  })
-  .catch(function(err) {
-    console.error(err.stack);
-    return res.status(500).send('An error occured. User may already exists.');
+  models.User.sync().then(function () {
+    models.User.create({
+      username: req.query.username.toLowerCase(),
+      email: req.query.email.toLowerCase(),
+      password: req.query.password,
+      citizen: req.query.citizen,
+      age: req.query.age,
+      tags: null,
+    })
+    .then(function(user) {
+      return res.status(200).send({userId: user.get('id')});
+    })
+    .catch(function(err) {
+      console.error(err.stack);
+      return res.status(500).send('An error occured. User may already exists.');
+    });
   });
 };
 module.exports.addUser = addUser;
