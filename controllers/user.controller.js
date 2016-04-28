@@ -22,6 +22,7 @@ module.exports.getAllUsers = getAllUsers;
  * @param {string} age : the user age
  * @return {Object} userId if creating, error else
  */
+ // TODO: Use find or create to handle user already created
 var addUser = function (req, res) {
   if (!req.query.username)
     res.status(500).send('ERROR: Missing params "username"');
@@ -59,10 +60,10 @@ var updateUser = function (req, res) {
   // mise à jour du jour du user à partir de son id
   var userId = req.params.id;
   models.User.update({where: {id: userId,}})
-  .then(function(user)) {
+  .then(function(user) {
 
-  }
-}
+  });
+};
 module.exports.updateUser = updateUser;
 
 /**
@@ -73,14 +74,14 @@ module.exports.updateUser = updateUser;
 var deleteUser = function(req, res) {
   // supprime un user à partir de son id
   var userId = req.params.id;
-  models.User.destroy({where: {id: userId,} truncate: true})
+  models.User.destroy({where: {id: userId}, truncate: true})
   .then(function(user) {
     if(user)
       res.send('User with id'+ userId +' deleted' );
     else
       res.send('No User with this id :' + userId);
     });
-}
+};
 module.exports.deleteUser = deleteUser;
 
 /**
