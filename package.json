@@ -4,7 +4,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "mocha test/requests.js"
+    "test": "mocha test/user.test.js"
   },
   "keywords": [
     "lyon",
