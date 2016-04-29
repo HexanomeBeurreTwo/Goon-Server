@@ -11,22 +11,6 @@ var password = "passwordtest";
 var email = "test@continuous-integration-test.com";
 var citizen = "lyon";
 
-describe('GET /users', function() {
-  describe('#getAllUsers()', function () {
-    it('respond with json', function (done) {
-    	request
-        .get('/users')
-        .set('Accept', 'application/json')
-        .expect('Content-Type', /json/)
-        .expect(500, {error: 'Getting all user is not allowed.'})
-        .end(function(err, res) {
-          if(err) return done(err);
-          done();
-        });
-    });
-  });
-});
-
 describe('POST /user', function() {
   describe('#addUser()', function () {
     it('respond with json', function (done) {
@@ -40,12 +24,19 @@ describe('POST /user', function() {
               'email': email,
               'citizen': citizen
               })
-        .expect(hasUserIdKeys)
+        // .expect(hasUserIdKeys)
         .expect(200)
         .end(function(err, res) {
             if(err) return done(err);
             console.log(res.body);
-            userId = res.body.userId;
+            expect(res.body.username).to.equal(username.toLowerCase());
+            expect(res.body.email).to.equal(email.toLowerCase());
+            expect(res.body.password).to.equal(password);
+            expect(res.body.citizen).to.equal(citizen);
+            expect(res.body.age).to.equal(null);
+            expect(res.body.tags).to.equal(null);
+
+            userId = res.body.id;
             modify();
             done();
         });
@@ -54,6 +45,23 @@ describe('POST /user', function() {
 });
 
 function modify() {
+
+  describe('GET /user', function() {
+    describe('#getAllUsers()', function () {
+      it('respond with json', function (done) {
+      	request
+          .get('/user')
+          .set('Accept', 'application/json')
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .end(function(err, res) {
+            if(err) return done(err);
+            done();
+          });
+      });
+    });
+  });
+
   describe('PUT /user/:id', function() {
     describe('#updateUser()', function () {
       if (userId != null) {
