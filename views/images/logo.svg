@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="270px" height="270px" viewBox="0 0 270 270" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.6.1 (26313) - http://www.bohemiancoding.com/sketch -->
+    <title>GOON</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="123.234954%" y1="-22.2453704%" x2="25.4065394%" y2="97.9499421%" id="linearGradient-1">
+            <stop stop-color="#12DA51" offset="0%"></stop>
+            <stop stop-color="#22C08E" offset="50.0752296%"></stop>
+            <stop stop-color="#32A7CB" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="GOON">
+            <rect id="Rectangle-1" fill="url(#linearGradient-1)" x="0" y="0" width="270" height="270" rx="25"></rect>
+            <text id="G" font-family="Futura-Medium, Futura" font-size="144" font-weight="400" fill="#FFFFFF">
+                <tspan x="74.8554688" y="192">G</tspan>
+            </text>
+            <circle id="Oval-1" stroke="#FFFFFF" stroke-width="5" stroke-dasharray="52" transform="translate(136.500000, 137.500000) rotate(-345.000000) translate(-136.500000, -137.500000) " cx="136.5" cy="137.5" r="99.5"></circle>
+        </g>
+    </g>
+</svg>
