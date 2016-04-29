@@ -128,10 +128,10 @@ module.exports.subscribeChannel = subscribeChannel;
  * @return {Channel} Return the channel is succed, error else
  */
 var addActivityToChannel = function (req, res) {
-  if (!req.query.activityId)
+  if (!req.body.activityId)
     return res.status(500).json({error: 'ERROR: Missing params "activityId"'});
   var channelId = req.params.id;
-  var activityId = req.query.activityId;
+  var activityId = req.body.activityId;
   Promise.all([
     models.Channel.findOne({where: {id: channelId}}),
     models.Activity.findOne({where: {id: activityId}})
