@@ -5,6 +5,7 @@ var models = require('../models/index');
 
 var getActivities = function (req, res) {
 	//recupère la liste des activités
+	return res.status(200).json({message: "Not implemented yet"};
 }
 module.exports.getActivities = getActivities;
 
@@ -23,7 +24,7 @@ module.exports.getActivities = getActivities;
 var addActivity = function (req, res) {
 	//add an Activity
 	if (!req.body.name)
-		res.status(500).send('ERROR: Missing params "name"');
+		return res.status(500).send('ERROR: Missing params "name"');
   models.Activity.create({
 		name: req.body.name.toLowerCase(),
 		description: req.body.description ? req.body.description.toLowerCase() : null,
@@ -48,7 +49,7 @@ var addActivity = function (req, res) {
 module.exports.addActivity = addActivity;
 
 /**
- * Controller for update /activity/:id
+ * Controller for UPDATE /activity/:id
  * Return a activity by id
  * @param {interger} id : the activity id
  * @return {User} activity if existing, error else
@@ -66,21 +67,21 @@ var updateActivity = function (req, res) {
       return activity.update(values, selector);
     }).then(function(activity) {
       if(activity)
-        res.status(200).json(activity);
+        return res.status(200).json(activity);
       else
-        res.status(500).json({ error: 'No Activity with this id :' + activityId});
+        return res.status(500).json({ error: 'No Activity with this id :' + activityId});
     }).catch(function(err) {
       console.error(err.stack);
-      res.status(500).json({ error: 'Error updating activity: '+ err});
+      return res.status(500).json({ error: 'Error updating activity: '+ err});
     });
   } else  {
-      res.status(500).json({ error: 'No update because there are no name'});
+      return res.status(500).json({ error: 'No update because there are no name'});
   }
 };
 module.exports.updateActivity = updateActivity;
 
 /**
- * Controller for delete /activity/:id
+ * Controller for DELETE /activity/:id
  * Return nothing
  * @param {interger} id : the activity id
  */
@@ -91,12 +92,12 @@ var deleteActivity = function (req, res) {
     return activity.destroy();
   }).then(function(activity) {
     if(activity)
-      res.status(200).json({ message: 'Activity with id'+ activityId +' deleted' });
+      return res.status(200).json({ message: 'Activity with id'+ activityId +' deleted' });
     else
-      res.status(500).json({ error: 'No Activity with this id :' + activityId});
+      return res.status(500).json({ error: 'No Activity with this id :' + activityId});
   }).catch(function(error) {
     console.log("ops: " + error);
-    res.status(500).json({ error: 'Error deleting activity: '+ error});
+    return res.status(500).json({ error: 'Error deleting activity: '+ error});
   });
 };
 module.exports.deleteActivity = deleteActivity;
@@ -113,9 +114,9 @@ var getActivity = function (req, res) {
 	models.Activity.findOne({where: {id: activityId,}})
 	.then(function (activity) {
 	if(activity)
-	res.send(activity.toJSON());
+	return res.send(activity.toJSON());
 	else
-	res.send('No Activity with this id :' + activityId);
+	return res.send('No Activity with this id :' + activityId);
   	});
 }
 module.exports.getActivity = getActivity;

@@ -4,33 +4,33 @@ var models = require('../models/index');
 
 
 var getChannels = function (req, res) {
-	//recupère la liste des activités
+	//recupère la liste des channels
+	return res.status(200).json({message: "Not implemented yet"};
 }
 module.exports.getChannels = getChannels;
 
 /**
+ * Controller for POST /channel/
  * Add a channel to the database
  * @param {string} name : the channel name - required
  * @param {string} description : a channel description
  * @return {Object} channelId if creating, error else
  */
 var addChannel = function (req, res) {
-  if (!req.query.name)
-    return res.status(500).send('ERROR: Missing params "name"');
-	models.Channel.sync().then(function () {
-	  models.Channel.create({
-	    name: req.query.name,
-	    description: req.query.description,
-	    tags: null,
-	  })
-	  .then(function(channel) {
-	    return res.status(200).send({channelId: channel.get('id')});
-	  })
-	  .catch(function(err) {
-	    console.error(err.stack);
-	    return res.status(500).send('An error occured. Channel may already exists.');
-	  });
-	});
+  if (!req.body.name)
+    return res.status(500).json({error: 'ERROR: Missing params "name"'});
+  models.Channel.create({
+    name: req.body.name,
+    description: req.body.description,
+    tags: null,
+  })
+  .then(function(channel) {
+    return res.status(200).json(channel);
+  })
+  .catch(function(err) {
+    console.error(err.stack);
+    return res.status(500).json({error: 'An error occured. Channel may already exists.'});
+  });
 };
 module.exports.addChannel = addChannel;
 
@@ -63,16 +63,16 @@ var getChannelActivities = function(req, res) {
     channel.getActivities()
     .then(function (activities) {
       console.log(activities);
-      return res.status(200).send(activities);
+      return res.status(200).json(activities);
     })
     .catch(function (err) {
       console.error(err.stack);
-      return res.status(500).send('An error occured. Channels activities unaccessible.');
+      return res.status(500).json({error: 'An error occured. Channels activities unaccessible.'});
     });
   })
   .catch(function (err) {
     console.error(err.stack);
-    return res.status(500).send('An error occured. Channel might not exist.');
+    return res.status(500).json({error: 'An error occured. Channel might not exist.'});
   });
 }
 module.exports.getChannelActivities = getChannelActivities;
@@ -85,10 +85,10 @@ module.exports.getChannelActivities = getChannelActivities;
  * @return {Channel} Return the channel is succed, error else
  */
 var subscribeChannel = function (req, res) {
-  if (!req.query.userId)
-    return res.status(500).send('ERROR: Missing params "userId"');
+  if (!req.body.userId)
+    return res.status(500).json({error: 'ERROR: Missing params "userId"'});
   var channelId = req.params.id;
-  var userId = req.query.userId;
+  var userId = req.body.userId;
   models.Channel.findOne({where: {id: channelId}})
   .then(function (channel) {
     models.User.findOne({where: {id: userId}})
@@ -98,12 +98,12 @@ var subscribeChannel = function (req, res) {
     })
     .catch(function (err) {
 	    console.error(err.stack);
-	    return res.status(500).send('An error occured. User might not exist.');
+	    return res.status(500).json({error: 'An error occured. User might not exist.'});
     });
   })
   .catch(function (err) {
     console.error(err.stack);
-    return res.status(500).send('An error occured. Channel might not exist.');
+    return res.status(500).json({error: 'An error occured. Channel might not exist.'});
   });
 };
 module.exports.subscribeChannel = subscribeChannel;
@@ -116,7 +116,7 @@ module.exports.subscribeChannel = subscribeChannel;
  */
 var addActivityToChannel = function (req, res) {
   if (!req.query.activityId)
-    return res.status(500).send('ERROR: Missing params "activityId"');
+    return res.status(500).json({error: 'ERROR: Missing params "activityId"'});
   var channelId = req.params.id;
   var activityId = req.query.activityId;
   Promise.all([
@@ -132,12 +132,12 @@ var addActivityToChannel = function (req, res) {
     })
     .catch(function (err) {
       console.error(err.stack);
-      return res.status(500).send('An error occured. Channel might not exist.');
+      return res.status(500).json({error: 'An error occured. Channel might not exist.'});
     })
   })
   .catch(function (err) {
     console.error(err.stack);
-    return res.status(500).send('An error occured. Channel might not exist.');
+    return res.status(500).json({error: 'An error occured. Channel might not exist.'});
   })
 };
 module.exports.addActivityToChannel = addActivityToChannel;

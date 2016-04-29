@@ -8,14 +8,13 @@ var models = require('../models/index');
  * @return {Array of User} array contening all the users objects
  */
 var getAllUsers = function (req, res) {
-  // TODO: Return all users as an array on user
   models.User.findAll({})
   .then(function(users) {
     return res.json(users);
   })
   .catch(function(err) {
     console.error(err.stack);
-    return res.status(500).send('An error occured.');
+    return res.status(500).json({error: 'An error occured.'});
   });
 };
 module.exports.getAllUsers = getAllUsers;
@@ -33,39 +32,36 @@ module.exports.getAllUsers = getAllUsers;
  // TODO: Use find or create to handle user already created
 var addUser = function (req, res) {
   if (!req.body.username)
-    res.status(500).send('ERROR: Missing params "username"');
+    return res.status(500).send('ERROR: Missing params "username"');
   if (!req.body.email)
-    res.status(500).send('ERROR: Missing params "email"');
+    return res.status(500).send('ERROR: Missing params "email"');
   if (!req.body.password)
-    res.status(500).send('ERROR: Missing params "password"');
-  models.User.sync().then(function () {
-    models.User.create({
-      username: req.body.username.toLowerCase(),
-      email: req.body.email.toLowerCase(),
-      password: req.body.password,
-      citizen: req.body.citizen,
-      age: req.body.age,
-      tags: null,
-    })
-    .then(function(user) {
-      return res.status(200).json({userId: user.get('id')});
-    })
-    .catch(function(err) {
-      console.error(err.stack);
-      return res.status(500).json({error: 'An error occured. User may already exists.'});
-    });
+    return res.status(500).send('ERROR: Missing params "password"');
+  models.User.create({
+    username: req.body.username.toLowerCase(),
+    email: req.body.email.toLowerCase(),
+    password: req.body.password,
+    citizen: req.body.citizen,
+    age: req.body.age,
+    tags: null,
+  })
+  .then(function(user) {
+    return res.status(200).json(user);
+  })
+  .catch(function(err) {
+    console.error(err.stack);
+    return res.status(500).json({error: 'An error occured. User may already exists.'});
   });
 };
 module.exports.addUser = addUser;
 
 /**
- * Controller for update /user/:id
+ * Controller for UPDATE /user/:id
  * Return a user by id
- * @param {interger} id : the user id
+ * @param {interger} id : the user id - required
  * @return {User} user if existing, error else
  */
 var updateUser = function (req, res) {
-  // mise à jour du jour du user à partir de son id
   var userId = req.params.id;
   var selector = { where: { id: userId } };
   var values = new Object();
@@ -81,23 +77,24 @@ var updateUser = function (req, res) {
       return user.update(values, selector);
     }).then(function(user) {
       if(user)
-        res.status(200).json(user);
+        return res.status(200).json(user);
       else
-        res.status(500).json({ error: 'No User with this id :' + userId});
+        return res.status(500).json({ error: 'No User with this id :' + userId});
     }).catch(function(err) {
       console.error(err.stack);
-      res.status(500).json({ error: 'Error updating user: '+ err});
+      return res.status(500).json({ error: 'Error updating user: '+ err});
     });
   } else  {
-      res.status(500).json({ error: 'No update because there are no username, email or password'});
+      return res.status(500).json({ error: 'No update because there are no username, email or password'});
   }
 };
 module.exports.updateUser = updateUser;
 
 /**
- * Controller for delete /user/:id
- * Return nothing
+ * Controller for DELETE /user/:id
+ * Delete a user
  * @param {interger} id : the user id
+ * @return {} error if errors
  */
 var deleteUser = function(req, res) {
   // supprime un user à partir de son id
@@ -106,9 +103,9 @@ var deleteUser = function(req, res) {
     return user.destroy();
   }).then(function(user) {
     if(user)
-      res.status(200).json({ message: 'User with id'+ userId +' deleted' });
+      return res.status(200).json({ message: 'User with id'+ userId +' deleted' });
     else
-      res.status(500).json({ error: 'No User with this id :' + userId});
+      return res.status(500).json({ error: 'No User with this id :' + userId});
   }).catch(function(error) {
     console.log("ops: " + error);
     res.status(500).json({ error: 'Error deleting user: '+ error});
@@ -127,10 +124,10 @@ var getUser = function(req, res) {
   var userId = req.params.id;
   models.User.findOne({where: {id: userId,}})
   .then(function (user) {
-    if(user)
-      res.send(user.toJSON());
-    else
-      res.send('No User with this id :' + userId);
+    return res.json(user);
+  })
+  .catch(function (err) {
+    return res.json({error: 'No User with this id : ' + userId});
   });
 }
 module.exports.getUser = getUser;
@@ -145,9 +142,9 @@ module.exports.getUser = getUser;
  */
 var userConnection = function (req, res) {
   if (!req.query.username && !req.query.email)
-    return res.status(500).send('ERROR: Missing params "email" or "username"');
+    return res.status(500).json({error: 'ERROR: Missing params "email" or "username"'});
   if (!req.query.password)
-    return res.status(500).send('ERROR: Missing params "password"');
+    return res.status(500).json({error: 'ERROR: Missing params "password"'});
   if (req.query.username)
     var query = {username: req.query.username.toLowerCase()};
   else if (req.query.email)
@@ -155,9 +152,9 @@ var userConnection = function (req, res) {
   models.User.findOne({where: query})
   .then(function (user) {
     if(user.get('password') === req.query.password)
-      res.status(200).json(user);
+      return res.status(200).json(user);
     else
-      res.status(500).json({error:'Wrong password'});
+      return res.status(500).json({error:'Wrong password'});
   })
   .catch(function(err) {
     console.error(err.stack);
@@ -179,16 +176,16 @@ var getChannels = function(req, res) {
     user.getChannels()
     .then(function (channels) {
       console.log(channels);
-      return res.status(200).send(channels);
+      return res.status(200).json(channels);
     })
     .catch(function (err) {
       console.error(err.stack);
-      return res.status(500).send('An error occured. Users channels unaccessible.');
+      return res.status(500).json({error: 'An error occured. Users channels unaccessible.'});
     });
   })
   .catch(function (err) {
     console.error(err.stack);
-    return res.status(500).send('An error occured. User might not exist.');
+    return res.status(500).json({error: 'An error occured. User might not exist.'});
   });
 }
 module.exports.getChannels = getChannels;
