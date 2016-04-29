@@ -9,9 +9,9 @@ var models = require('../models/index');
  */
 var getAllUsers = function (req, res) {
   // TODO: Return all users as an array on user
-  models.users.findAll({})
-  .then(function(user) {
-    return res.json(user);
+  models.User.findAll({})
+  .then(function(users) {
+    return res.json(users);
   })
   .catch(function(err) {
     console.error(err.stack);
