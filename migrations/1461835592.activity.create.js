@@ -44,10 +44,10 @@ module.exports = {
         type:   Sequelize.ENUM,
       },
       source: {
-        type:   DataTypes.STRING,
+        type:   Sequelize.STRING,
       },
       idSource: {
-        type:   DataTypes.DECIMAL,
+        type:   Sequelize.DECIMAL,
       },
       createdAt: {
         allowNull: false,
