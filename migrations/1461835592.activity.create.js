@@ -40,8 +40,9 @@ module.exports = {
       opening_hours: {
         type: Sequelize.ARRAY(Sequelize.INTEGER)
       },
-      ActivityTypeId: {
-        type: Sequelize.STRING,
+      type: {
+        type:   Sequelize.ENUM,
+        values: ['lyon'],
       },
       createdAt: {
         allowNull: false,

@@ -34,6 +34,7 @@ var addActivity = function (req, res) {
 		return res.status(500).send('ERROR: Missing params "name"');
   models.Activity.create({
 		name: req.body.name.toLowerCase(),
+		type: req.body.type,
 		description: req.body.description ? req.body.description.toLowerCase() : null,
 		tags: req.body.tags,
 		address: req.body.address,
@@ -43,7 +44,6 @@ var addActivity = function (req, res) {
 		date_start: req.body.date_start,
 		date_end: req.body.date_end,
 		opening_hours: req.body.opening_hours,
-		ActivityTypeId: req.body.ActivityTypeId,
   })
   .then(function(activity) {
     return res.status(200).json(activity);
@@ -103,7 +103,7 @@ var deleteActivity = function (req, res) {
     else
       return res.status(500).json({ error: 'No Activity with this id :' + activityId});
   }).catch(function(error) {
-    console.log("ops: " + error);
+		console.error(err.stack);
     return res.status(500).json({ error: 'Error deleting activity: '+ error});
   });
 };
@@ -118,12 +118,12 @@ module.exports.deleteActivity = deleteActivity;
 var getActivity = function (req, res) {
 	//get an activity via its id
 	var activityId = req.params.id;
-	models.Activity.findOne({where: {id: activityId,}})
+	models.Activity.findOne({where: {id: activityId}})
 	.then(function (activity) {
-	if(activity)
-	return res.send(activity.toJSON());
-	else
-	return res.send('No Activity with this id :' + activityId);
-  	});
-}
+		return res.json(activity);
+	})
+	.catch(function () {
+		return res.json({error: 'No Activity with this id :' + activityId});
+	});
+};
 module.exports.getActivity = getActivity;
