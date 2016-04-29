@@ -25,10 +25,6 @@ module.exports.getAllUsers = getAllUsers;
  */
  // TODO: Use find or create to handle user already created
 var addUser = function (req, res) {
-  console.log(req.body);
-  console.log(req.body.username);
-  console.log(req.body.email);
-
   if (!req.body.username)
     res.status(500).json({ error: 'ERROR: Missing params "username"'});
   if (!req.body.email)
