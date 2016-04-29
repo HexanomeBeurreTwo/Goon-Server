@@ -12,7 +12,8 @@ var getChannels = function (req, res) {
   .catch(function(err) {
     console.error(err.stack);
     return res.status(500).json({error: 'An error occured.'});
-  });}
+  });
+}
 module.exports.getChannels = getChannels;
 
 /**

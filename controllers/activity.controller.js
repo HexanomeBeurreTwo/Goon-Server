@@ -5,8 +5,15 @@ var models = require('../models/index');
 
 var getActivities = function (req, res) {
 	//recupère la liste des activités
-	return res.status(200).json({message: "Not implemented yet"});
-}
+	models.Activity.findAll({})
+	.then(function(activities) {
+		return res.json(activities);
+	})
+	.catch(function(err) {
+		console.error(err.stack);
+		return res.status(500).json({error: 'An error occured.'});
+	});
+};
 module.exports.getActivities = getActivities;
 
 /**
