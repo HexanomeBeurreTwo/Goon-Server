@@ -9,6 +9,7 @@ var models = require('../models/index');
  */
 var getAllUsers = function (req, res) {
   // TODO: Return all users as an array on user
+  res.status(500).json({error: 'Getting all user is not allowed.'});
 };
 module.exports.getAllUsers = getAllUsers;
 
@@ -24,27 +25,27 @@ module.exports.getAllUsers = getAllUsers;
  */
  // TODO: Use find or create to handle user already created
 var addUser = function (req, res) {
-  if (!req.query.username)
-    return res.status(500).send('ERROR: Missing params "username"');
-  if (!req.query.email)
-    return res.status(500).send('ERROR: Missing params "email"');
-  if (!req.query.password)
-    return res.status(500).send('ERROR: Missing params "password"');
+  if (!req.body.username)
+    res.status(500).send('ERROR: Missing params "username"');
+  if (!req.body.email)
+    res.status(500).send('ERROR: Missing params "email"');
+  if (!req.body.password)
+    res.status(500).send('ERROR: Missing params "password"');
   models.User.sync().then(function () {
     models.User.create({
-      username: req.query.username.toLowerCase(),
-      email: req.query.email.toLowerCase(),
-      password: req.query.password,
-      citizen: req.query.citizen,
-      age: req.query.age,
+      username: req.body.username.toLowerCase(),
+      email: req.body.email.toLowerCase(),
+      password: req.body.password,
+      citizen: req.body.citizen,
+      age: req.body.age,
       tags: null,
     })
     .then(function(user) {
-      return res.status(200).send({userId: user.get('id')});
+      return res.status(200).json({userId: user.get('id')});
     })
     .catch(function(err) {
       console.error(err.stack);
-      return res.status(500).send('An error occured. User may already exists.');
+      return res.status(500).json({error: 'An error occured. User may already exists.'});
     });
   });
 };
@@ -59,10 +60,31 @@ module.exports.addUser = addUser;
 var updateUser = function (req, res) {
   // mise à jour du jour du user à partir de son id
   var userId = req.params.id;
-  models.User.update({where: {id: userId,}})
-  .then(function(user) {
+  var selector = { where: { id: userId } };
+  var values = new Object();
+  if (req.body.username)
+    values.username = req.body.username;
+  if (req.body.email)
+    values.email = req.body.email;
+  if (req.body.password)
+    values.password = req.body.password;
+  console.log(JSON.stringify(values));
 
-  });
+  if (values) {
+    models.User.findById(userId).then(function(user) {
+      return user.update(values, selector);
+    }).then(function(user) {
+      if(user)
+        res.status(200).json(user);
+      else 
+        res.status(500).json({ error: 'No User with this id :' + userId});
+    }).catch(function(error) {
+      console.log("ops: " + error);
+      res.status(500).json({ error: 'Error updating user: '+ error});
+    });
+  } else  {
+      res.status(500).json({ error: 'No update because there are no username, email or password'});
+  }
 };
 module.exports.updateUser = updateUser;
 
@@ -74,13 +96,17 @@ module.exports.updateUser = updateUser;
 var deleteUser = function(req, res) {
   // supprime un user à partir de son id
   var userId = req.params.id;
-  models.User.destroy({where: {id: userId}, truncate: true})
-  .then(function(user) {
+  models.User.findById(userId).then(function(user) {
+    return user.destroy();
+  }).then(function(user) {
     if(user)
-      res.send('User with id'+ userId +' deleted' );
-    else
-      res.send('No User with this id :' + userId);
-    });
+      res.status(200).json({ message: 'User with id'+ userId +' deleted' });
+    else 
+      res.status(500).json({ error: 'No User with this id :' + userId});
+  }).catch(function(error) {
+    console.log("ops: " + error);
+    res.status(500).json({ error: 'Error deleting user: '+ error});
+  });
 };
 module.exports.deleteUser = deleteUser;
 
@@ -123,13 +149,13 @@ var userConnection = function (req, res) {
   models.User.findOne({where: query})
   .then(function (user) {
     if(user.get('password') === req.query.password)
-      res.send(user.toJSON());
+      res.status(200).json(user);
     else
-      res.send('Wrong password');
+      res.status(500).json({error:'Wrong password'});
   })
   .catch(function(err) {
     console.error(err.stack);
-    return res.status(500).send('An error occured. Please try again later.');
+    return res.status(500).json({error:'An error occured. Please try again later.'});
   });
 }
 module.exports.userConnection = userConnection;
