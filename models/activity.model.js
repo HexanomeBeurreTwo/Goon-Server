@@ -37,6 +37,12 @@ module.exports = function(sequelize, DataTypes) {
       type:   DataTypes.ENUM,
       values: ['PATRIMOINE_CULTUREL', "RESTAURATION", "DEGUSTATION", "COMMERCE_ET_SERVICE", "HEBERGEMENT_LOCATIF", "HEBERGEMENT_COLLECTIF", "HOTELLERIE"],
     },
+    source: {
+      type:   DataTypes.STRING,
+    },
+    idSource: {
+      type:   DataTypes.DECIMAL,
+    },
   }, {
     classMethods: {
       associate: function(models) {

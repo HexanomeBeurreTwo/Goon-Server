@@ -42,7 +42,12 @@ module.exports = {
       },
       type: {
         type:   Sequelize.ENUM,
-        values: ['lyon'],
+      },
+      source: {
+        type:   DataTypes.STRING,
+      },
+      idSource: {
+        type:   DataTypes.DECIMAL,
       },
       createdAt: {
         allowNull: false,
