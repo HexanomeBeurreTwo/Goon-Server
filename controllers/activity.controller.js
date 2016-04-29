@@ -12,10 +12,10 @@ module.exports.getActivities = getActivities;
  * Controller for POST /activity/
  * Creates a activity in the database
  * @param {string} name : the user name - required
- * @param {string} address 
- * @param {decimal} latitude 
+ * @param {string} address
+ * @param {decimal} latitude
  * @param {decimal} longitude
- * @param {boolean} temporary 
+ * @param {boolean} temporary
  * @param {date} date_start
  * @param {date} date_end
  * @return {Object} activityId if creating, error else
@@ -24,10 +24,9 @@ var addActivity = function (req, res) {
 	//add an Activity
 	if (!req.body.name)
 		res.status(500).send('ERROR: Missing params "name"');
-  models.Activity.sync().then(function () {
-    models.Activity.create({
+  models.Activity.create({
 		name: req.body.name.toLowerCase(),
-		description: req.body.description.toLowerCase(),
+		description: req.body.description ? req.body.description.toLowerCase() : null,
 		tags: req.body.tags,
 		address: req.body.address,
 		latitude: req.body.latitude,
@@ -37,14 +36,13 @@ var addActivity = function (req, res) {
 		date_end: req.body.date_end,
 		opening_hours: req.body.opening_hours,
 		ActivityTypeId: req.body.ActivityTypeId,
-    })
-    .then(function(activity) {
-      return res.status(200).json({activityId: activity.get('id')});
-    })
-    .catch(function(err) {
-      console.error(err.stack);
-      return res.status(500).json({error: 'An error occured. Activity may already exists.'});
-    });
+  })
+  .then(function(activity) {
+    return res.status(200).json(activity);
+  })
+  .catch(function(err) {
+    console.error(err.stack);
+    return res.status(500).json({error: 'An error occured. Activity may already exists.'});
   });
 };
 module.exports.addActivity = addActivity;
