@@ -5,8 +5,14 @@ var models = require('../models/index');
 
 var getChannels = function (req, res) {
 	//recupère la liste des channels
-	return res.status(200).json({message: "Not implemented yet"};
-}
+	models.Channel.findAll({})
+  .then(function(channels) {
+    return res.json(channels);
+  })
+  .catch(function(err) {
+    console.error(err.stack);
+    return res.status(500).json({error: 'An error occured.'});
+  });}
 module.exports.getChannels = getChannels;
 
 /**
@@ -45,7 +51,14 @@ var deleteChannel = function (req, res) {
 module.exports.deleteChannel = deleteChannel;
 
 var getChannel = function (req, res) {
-	//get a Channel via its id
+	var channelId = req.params.id;
+  models.User.findOne({where: {id: channelId}})
+  .then(function (channel) {
+    return res.json(channel);
+  })
+  .catch(function (err) {
+    return res.json({error: 'No Channel with this id : ' + channelId});
+  });
 }
 module.exports.getChannel = getChannel;
 
