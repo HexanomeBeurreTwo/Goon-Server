@@ -9,7 +9,14 @@ var models = require('../models/index');
  */
 var getAllUsers = function (req, res) {
   // TODO: Return all users as an array on user
-  res.status(500).json({error: 'Getting all user is not allowed.'});
+  models.users.findAll({})
+  .then(function(user) {
+    return res.json(user);
+  })
+  .catch(function(err) {
+    console.error(err.stack);
+    return res.status(500).send('An error occured.');
+  });
 };
 module.exports.getAllUsers = getAllUsers;
 
@@ -68,7 +75,6 @@ var updateUser = function (req, res) {
     values.email = req.body.email;
   if (req.body.password)
     values.password = req.body.password;
-  console.log(JSON.stringify(values));
 
   if (values) {
     models.User.findById(userId).then(function(user) {
@@ -76,11 +82,11 @@ var updateUser = function (req, res) {
     }).then(function(user) {
       if(user)
         res.status(200).json(user);
-      else 
+      else
         res.status(500).json({ error: 'No User with this id :' + userId});
-    }).catch(function(error) {
-      console.log("ops: " + error);
-      res.status(500).json({ error: 'Error updating user: '+ error});
+    }).catch(function(err) {
+      console.error(err.stack);
+      res.status(500).json({ error: 'Error updating user: '+ err});
     });
   } else  {
       res.status(500).json({ error: 'No update because there are no username, email or password'});
@@ -101,7 +107,7 @@ var deleteUser = function(req, res) {
   }).then(function(user) {
     if(user)
       res.status(200).json({ message: 'User with id'+ userId +' deleted' });
-    else 
+    else
       res.status(500).json({ error: 'No User with this id :' + userId});
   }).catch(function(error) {
     console.log("ops: " + error);
