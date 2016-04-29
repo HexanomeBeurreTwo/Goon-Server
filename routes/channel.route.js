@@ -9,6 +9,7 @@ module.exports = function(router)
 	router.put('/channel/:id', channel.updateChannel);
 	router.delete('channel/:id', channel.deleteChannel);
 	router.get('/channel/:id', channel.getChannel);
+	router.post('/channel/:id/activity', channel.addActivityToChannel);
 	router.get('/channel/:id/activities', channel.getChannelActivities);
-	router.post('/channel/subscribe/:id', channel.subscribeChannel);
+	router.post('/channel/:id/subscribe', channel.subscribeChannel);
 };

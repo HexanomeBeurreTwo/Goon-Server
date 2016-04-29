@@ -173,7 +173,6 @@ module.exports.userConnection = userConnection;
  * @return {Arrar[Channel]} An array of Channel
  */
 var getChannels = function(req, res) {
-  //récuper les infos d'un user à partir de son id
   var userId = req.params.id;
   models.User.findOne({where: {id: userId,}})
   .then(function (user) {
