@@ -68,22 +68,31 @@ module.exports.addUser = addUser;
 var updateUser = function (req, res) {
   // mise à jour du jour du user à partir de son id
   var userId = req.params.id;
-  models.User.update({
-      username: req.query.username.toLowerCase(),
-      email: req.query.email.toLowerCase(),
-      password: req.query.password,
-      citizen: req.query.citizen,
-      age: req.query.age,
-      tags: req.query.tags,
-    },{
-      where : {id: userId}
-    })
-  .then(function() {
-      return res.send(user.toJSON());
-  })
-  .catch (function() {
-    return res.send('No User with this id :' + userId);
-  });
+  var selector = { where: { id: userId } };
+  var values = new Object();
+  if (req.body.username)
+    values.username = req.body.username;
+  if (req.body.email)
+    values.email = req.body.email;
+  if (req.body.password)
+    values.password = req.body.password;
+  console.log(JSON.stringify(values));
+
+  if (values) {
+    models.User.findById(userId).then(function(user) {
+      return user.update(values, selector);
+    }).then(function(user) {
+      if(user)
+        res.status(200).json(user);
+      else 
+        res.status(500).json({ error: 'No User with this id :' + userId});
+    }).catch(function(error) {
+      console.log("ops: " + error);
+      res.status(500).json({ error: 'Error updating user: '+ error});
+    });
+  } else  {
+      res.status(500).json({ error: 'No update because there are no username, email or password'});
+  }
 };
 module.exports.updateUser = updateUser;
 
@@ -95,14 +104,17 @@ module.exports.updateUser = updateUser;
 var deleteUser = function(req, res) {
   // supprime un user à partir de son id
   var userId = req.params.id;
-  models.User.destroy({where: {id: userId}})
-  .then(function() {
-      return res.send('User with id'+ userId +' deleted' );
-    })
-    .catch (function() {
-      return res.send('No User with this id :' + userId);
-    });
-      
+  models.User.findById(userId).then(function(user) {
+    return user.destroy();
+  }).then(function(user) {
+    if(user)
+      res.status(200).json({ message: 'User with id'+ userId +' deleted' });
+    else 
+      res.status(500).json({ error: 'No User with this id :' + userId});
+  }).catch(function(error) {
+    console.log("ops: " + error);
+    res.status(500).json({ error: 'Error deleting user: '+ error});
+  });
 };
 module.exports.deleteUser = deleteUser;
 
