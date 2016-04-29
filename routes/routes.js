@@ -8,6 +8,8 @@ router.use(bodyParser.json()); // support json encoded bodies
 router.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 var user = require('./user.route')(router);
+var activity = require('./activity.route')(router);
+var activityType = require('./activityType.route')(router);
 var channel = require('./channel.route')(router);
 var helloworld = require('./helloworld.route')(router);
 
