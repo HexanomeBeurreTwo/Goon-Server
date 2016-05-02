@@ -43,12 +43,48 @@ module.exports.addChannel = addChannel;
 
 var updateChannel = function (req, res) {
 	// update a Channel via its id
-}
+  var channelId = req.params.id;
+  var selector = { where: { id: channelId } };
+  var values = new Object();
+  if (req.body.name)
+    values.name = req.body.name;
+  if (req.body.description)
+    values.description = req.body.description;
+  if (req.body.tags)
+    values.tags = req.body.tags;
+  if (values) {
+    models.Channel.findById(channelId).then(function(channel) {
+      return channel.update(values, selector);
+    }).then(function(channel) {
+      if(channel)
+        return res.status(200).json(channel);
+      else
+        return res.status(500).json({ error: 'No Channel with this id :' + channelId});
+    }).catch(function(err) {
+      console.error(err.stack);
+      return res.status(500).json({ error: 'Error updating channel: '+ err});
+    });
+  } else  {
+      return res.status(500).json({ error: 'No update because there are no name'});
+  }
+};
 module.exports.updateChannel = updateChannel;
 
 var deleteChannel = function (req, res) {
 	//delete a Channel via its id
-}
+  var channelId = req.params.id;
+  models.Channel.findById(channelId).then(function(channel) {
+    return channel.destroy();
+  }).then(function(channel) {
+    if(channel)
+      return res.status(200).json({ message: 'Channel with id'+ channelId +' deleted' });
+    else
+      return res.status(500).json({ error: 'No Channel with this id :' + channelId});
+  }).catch(function(error) {
+    console.log("ops: " + error);
+    res.status(500).json({ error: 'Error deleting Channel: '+ error});
+  });
+};
 module.exports.deleteChannel = deleteChannel;
 
 var getChannel = function (req, res) {
