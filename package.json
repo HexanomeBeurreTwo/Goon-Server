@@ -4,7 +4,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "mocha"
+    "postinstall": "sequelize db:migrate",
+    "test": "mocha test/user.test.js"
   },
   "keywords": [
     "lyon",
@@ -15,10 +16,12 @@
   ],
   "author": "HexanomeBeurreTwo",
   "dependencies": {
+    "dotenv": "^2.0.0",
+    "body-parser": "^1.15.0",
     "ejs": "^2.4.1",
     "express": "4.13.3",
     "fs": "0.0.2",
-    "pg": "^4.5.3",
+    "pg": "^4.5.5",
     "pg-hstore": "^2.3.2",
     "request": "^2.65.0",
     "sequelize": "^3.22.0",
@@ -34,6 +37,7 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "mocha": "^2.4.5"
+    "mocha": "^2.4.5",
+    "supertest": "^1.2.0"
   }
 }
