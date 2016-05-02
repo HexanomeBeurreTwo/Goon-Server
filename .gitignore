@@ -35,6 +35,3 @@ node_modules
 
 #ENV File
 .ENV
-
-#config.json
-config.json
