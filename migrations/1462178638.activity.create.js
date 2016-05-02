@@ -42,7 +42,7 @@ module.exports = {
       },
       type: {
         type:   Sequelize.ENUM,
-        values: ["PATRIMOINE_CULTUREL", "RESTAURATION", "DEGUSTATION", "COMMERCE_ET_SERVICE", "HEBERGEMENT_LOCATIF", "HEBERGEMENT_COLLECTIF", "HOTELLERIE", "EQUIPEMENT"],
+        values: ["PATRIMOINE_CULTUREL", "RESTAURATION", "DEGUSTATION", "COMMERCE_ET_SERVICE", "HEBERGEMENT_LOCATIF", "HEBERGEMENT_COLLECTIF", "HOTELLERIE", "EQUIPEMENT", "EVENT"],
       },
       source: {
         type:   Sequelize.STRING,
