@@ -16,8 +16,8 @@
   ],
   "author": "HexanomeBeurreTwo",
   "dependencies": {
-    "dotenv": "^2.0.0",
     "body-parser": "^1.15.0",
+    "dotenv": "^2.0.0",
     "ejs": "^2.4.1",
     "express": "4.13.3",
     "fs": "0.0.2",

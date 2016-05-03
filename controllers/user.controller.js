@@ -71,7 +71,13 @@ var updateUser = function (req, res) {
     values.email = req.body.email;
   if (req.body.password)
     values.password = req.body.password;
-
+  if (req.body.citizen)
+    values.citizen = req.body.citizen;
+  if (req.body.age)
+    values.age = req.body.age;
+  if (req.body.tags)
+    values.tags = req.body.tags;
+  
   if (values) {
     models.User.findById(userId).then(function(user) {
       return user.update(values, selector);

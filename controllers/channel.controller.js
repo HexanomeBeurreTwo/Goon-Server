@@ -141,7 +141,7 @@ var addActivityToChannel = function (req, res) {
     var channel = results[0] || null;
     var activity = results[1] || null;
     channel.addActivity(activity, {match: 12})
-    .then(function (succes) {
+    .then(function (success) {
       return res.status(200).json({channel: channel,activity: activity });
     })
     .catch(function (err) {
