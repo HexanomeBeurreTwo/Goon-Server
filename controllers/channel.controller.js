@@ -89,7 +89,7 @@ module.exports.deleteChannel = deleteChannel;
 
 var getChannel = function (req, res) {
 	var channelId = req.params.id;
-  models.User.findOne({where: {id: channelId}})
+  models.Channel.findOne({where: {id: channelId}})
   .then(function (channel) {
     return res.json(channel);
   })
