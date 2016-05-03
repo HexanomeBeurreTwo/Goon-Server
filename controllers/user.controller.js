@@ -48,7 +48,7 @@ var addUser = function (req, res) {
   })
   .then(function(user) {
     userId = user.id;
-    models.Connection.create({id: userId, nb_connection: 1});
+    models.Connection.create({UserId: userId, nb_connection: 1});
     return res.status(200).json(user);
   })
   .catch(function(err) {

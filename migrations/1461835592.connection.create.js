@@ -4,8 +4,13 @@ module.exports = {
     return queryInterface.createTable('Connections', {
       id: {
         type: Sequelize.INTEGER,
-        foreignkey: true,
+        primaryKey: true,
+        autoIncrement: true,
         allowNull: false
+      },
+      UserId: {
+        type: Sequelize.INTEGER,
+        foreignKey: true
       },
       nb_connection: {
         type: Sequelize.INTEGER,
@@ -18,9 +23,6 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      },
-       UserId: {
-        type: Sequelize.INTEGER
       }
     });
   },
