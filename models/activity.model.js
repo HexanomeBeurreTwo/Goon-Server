@@ -46,7 +46,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     classMethods: {
       associate: function(models) {
-        Activity.belongsToMany(models.Channel, { through: 'ChannelActivity', foreignKey: 'ChannelId', as: 'Channels' });
+        Activity.belongsToMany(models.Channel, { through: 'ChannelActivity', foreignKey: 'ActivityId', as: 'Channels' });
       }
     }
   });
