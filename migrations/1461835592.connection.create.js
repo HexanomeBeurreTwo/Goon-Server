@@ -2,12 +2,25 @@
 module.exports = {
   up: function(queryInterface, Sequelize) {
     return queryInterface.createTable('Connections', {
-      userId: {
-        type: Sequelize.INTEGER
+      id: {
+        type: Sequelize.INTEGER,
+        foreignkey: true,
+        allowNull: false
       },
       nb_connection: {
         type: Sequelize.INTEGER,
         allowNull: false
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+       UserId: {
+        type: Sequelize.INTEGER
       }
     });
   },

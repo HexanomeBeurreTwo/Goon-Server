@@ -31,6 +31,7 @@ module.exports.getAllUsers = getAllUsers;
  */
  // TODO: Use find or create to handle user already created
 var addUser = function (req, res) {
+  var userId;
   if (!req.body.username)
     return res.status(500).json({ error: 'ERROR: Missing params "username"'});
   if (!req.body.email)
@@ -46,6 +47,8 @@ var addUser = function (req, res) {
     tags: null,
   })
   .then(function(user) {
+    userId = user.id;
+    models.Connection.create({id: userId, nb_connection: 1});
     return res.status(200).json(user);
   })
   .catch(function(err) {
@@ -99,6 +102,9 @@ module.exports.updateUser = updateUser;
 var deleteUser = function(req, res) {
   // supprime un user à partir de son id
   var userId = req.params.id;
+  models.Connection.findById(userId).then(function(connection){
+      connection.destroy();
+  });
   models.User.findById(userId).then(function(user) {
     return user.destroy();
   }).then(function(user) {
@@ -151,8 +157,12 @@ var userConnection = function (req, res) {
     var query = {email: req.query.email.toLowerCase()};
   models.User.findOne({where: query})
   .then(function (user) {
-    if(user.get('password') === req.query.password)
+    if(user.get('password') === req.query.password){
+      models.Connection.findById(user.id).then(function(connection) {
+      connection.increment('nb_connection', {by: 1})
+    })
       return res.status(200).json(user);
+    }
     else
       return res.status(500).json({error:'Wrong password'});
   })
